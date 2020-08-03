@@ -24,8 +24,11 @@ def crawl():
         'Referer': 'https://weibo.com/',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'
     }
-    r = requests.get(url,headers=headers)
-    return r
+    try：
+        r = requests.get(url, headers=headers, timeout =10)
+        return r
+    except:
+        return False
     # 爬虫结束
 
 def data_processing(r):
@@ -68,7 +71,6 @@ def build_path():
 def write_file(data,path):
     '''
     写入文件模块
-    无返回
     '''
     
     with open(path,'w',encoding='utf8') as f:
@@ -81,10 +83,14 @@ def write_file(data,path):
 def main():
     '''
     主函数
-    无返回
     '''
+    r = crawl()
+    if r :
+        write_file(data_processing(r),build_path())
+        print('获取热搜完毕，三秒后关闭…')
+    else :
+        print('爬虫失败，检查网络')
+    time.sleep(3)
     
-    write_file(data_processing(crawl()),build_path())
-
 if __name__ == '__main__':
     main()
