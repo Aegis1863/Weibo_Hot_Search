@@ -7,6 +7,7 @@ import os
 import time
 import requests
 import bs4
+import pandas as pd
 
 def crawl():
     '''
@@ -39,12 +40,18 @@ def data_processing(r):
 
     html_xpath = bs4.BeautifulSoup(r.text,'html.parser')
     data = {}
+    title = []
+    hot = []
     https = html_xpath.find_all('td',attrs={'class':'td-02'})
     for i in range(len(https)):
         tag = https[i].text.split('\n')
         if i == 0:
-            tag[2] = '置顶'
-        data[tag[1]]=tag[2]
+            tag[2] = '0'
+        title.append(tag[1])
+        hot.append(tag[2])
+        data['标题'] = title
+        data['热度'] = hot
+    data = pd.DataFrame(data)
     return data
     # 处理结束，标题和热度都存在字典data中
 
@@ -59,26 +66,20 @@ def build_path():
     year_path = time.strftime('%Y{y}',time.localtime()).format(y='年')
     month_path = time.strftime('%m{m}',time.localtime()).format(m='月')
     day_month = time.strftime('%d{d}',time.localtime()).format(d='日')
-    all_path = "./bs4版数据/" + year_path + '/'+ month_path + '/' + day_month
+    all_path = "./bs4[.csv]版数据/" + year_path + '/'+ month_path + '/' + day_month
     if not os.path.exists(all_path):
         # 创建多层路径
         os.makedirs(all_path)
     # 最终文件存储位置
     root = all_path  + "/"
-    path = root + time_name + '.md'
+    path = root + time_name + '.csv'
     return path
 
 def write_file(data,path):
     '''
     写入文件模块
     '''
-    
-    with open(path,'w',encoding='utf8') as f:
-        num = 0
-        for key in data:
-            num += 1
-            f.write('{}-{}-{}\n'.format(num,key,data[key]))
-    f.close()
+    data.to_csv(path,encoding='utf-8-sig') #编码格式必须为 utf-8-sig 不能为 utf-8
 
 def main():
     '''
