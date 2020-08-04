@@ -24,11 +24,11 @@ def crawl():
         'Referer': 'https://weibo.com/',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'
     }
-    try：
+    try:
         r = requests.get(url, headers=headers, timeout =10)
         return r
     except:
-        return False
+        return 0
     # 爬虫结束
 
 def data_processing(r):
