@@ -56,6 +56,7 @@ pip install -r requirements.txt
 ## 8月5日
 1. bs4版修改为.csv储存格式，更加利于后期数据分析
 2. 新的```.csv```文件统一存放于```bs4[.csv]版数据```文件夹中
-
+## 8月9日
+1. 增加说明，```bs4[txt]版数据```和```lxml版数据```已停更，所有新数据均保存在```bs4[.csv]```版数据文件中
 # License
 GNU General Public License v3.0
